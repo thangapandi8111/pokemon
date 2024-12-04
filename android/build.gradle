@@ -1,0 +1,36 @@
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.2.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22"
+        // Add other classpaths here, such as for Firebase
+    }
+}
+
+// Define the root build directory
+rootProject.buildDir = "../build"
+
+// Configure subprojects to use the root build directory
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+
+// Ensure the `:app` module is evaluated first
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+// Define a clean task
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
