@@ -232,40 +232,61 @@ class _PokiHomeState extends State<PokiHome> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  IconButton(
-                                    icon: Icon(
-                                      isFavorite
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
-                                      color: isFavorite
-                                          ? Colors.red
-                                          : Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      toggleFavoritePokemon(
-                                          pokemonNumber, pokemonName, imageUrl);
-                                    },
+                                  Row(
+                                    children: [
+                                      Image.network(
+                                        imageUrl,
+                                        width: 90,
+                                        height: 90,
+                                        gaplessPlayback: true,
+                                        fit: BoxFit.fill,
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                Icon(Icons.error),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 14.0, bottom: 40, right: 0.0),
+                                        child: IconButton(
+                                          icon: Icon(
+                                            isFavorite
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: isFavorite
+                                                ? Colors.red
+                                                : Colors.white,
+                                          ),
+                                          onPressed: () {
+                                            toggleFavoritePokemon(pokemonNumber,
+                                                pokemonName, imageUrl);
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   SizedBox(height: 8),
-                                  Image.network(
-                                    imageUrl,
-                                    width: 70,
-                                    height: 69,
-                                    gaplessPlayback: true,
-                                    fit: BoxFit.fill,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            Icon(Icons.error),
-                                  ),
+
                                   SizedBox(height: 8),
                                   Text(
                                     pokemonName ?? 'No Name',
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FontStyle.italic,
+                                      fontSize: 16,
+                                      shadows: [
+                                        Shadow(
+                                          color: Colors.black,
+                                          offset: Offset(0, 2),
+                                          blurRadius: 1,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Text(
-                                    'ID: $pokemonNumber',
-                                    style: TextStyle(color: Colors.white70),
-                                  ),
+                                  // Text(
+                                  //   'ID: $pokemonNumber',
+                                  //   style: TextStyle(color: Colors.white70),
+                                  // ),
                                 ],
                               ),
                             ),
