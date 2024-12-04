@@ -38,7 +38,8 @@ class _PokiHomeState extends State<PokiHome> {
     if (_isFetchingMore) return;
 
     setState(() {
-      _isLoading = _data.isEmpty; // Show loading spinner only for the initial load
+      _isLoading =
+          _data.isEmpty; // Show loading spinner only for the initial load
       _isFetchingMore = true;
     });
 
@@ -80,13 +81,16 @@ class _PokiHomeState extends State<PokiHome> {
   }
 
   String getPokemonNumber(String url) {
-    return url.split('/').where((e) => e.isNotEmpty).last; // Extract the numeric ID
+    return url
+        .split('/')
+        .where((e) => e.isNotEmpty)
+        .last; // Extract the numeric ID
   }
 
   Future<Color> getDominantColor(String imageUrl) async {
     try {
       final PaletteGenerator paletteGenerator =
-      await PaletteGenerator.fromImageProvider(
+          await PaletteGenerator.fromImageProvider(
         NetworkImage(imageUrl),
       );
       return paletteGenerator.dominantColor?.color ?? Colors.grey;
@@ -95,7 +99,8 @@ class _PokiHomeState extends State<PokiHome> {
     }
   }
 
-  Future<void> toggleFavoritePokemon(String pokemonId, String name, String imageUrl) async {
+  Future<void> toggleFavoritePokemon(
+      String pokemonId, String name, String imageUrl) async {
     if (user == null) return;
 
     final favoritesRef = FirebaseFirestore.instance
@@ -133,9 +138,11 @@ class _PokiHomeState extends State<PokiHome> {
 
     return docSnapshot.exists;
   }
+
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -171,102 +178,105 @@ class _PokiHomeState extends State<PokiHome> {
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : GridView.builder(
-        controller: _scrollController,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Number of items per row
-          crossAxisSpacing: 8.0, // Horizontal spacing between items
-          mainAxisSpacing: 8.0, // Vertical spacing between items
-          childAspectRatio: 1, // Aspect ratio of the cards
-        ),
-        itemCount: _data.length + 1, // Add one for the loading indicator
-        itemBuilder: (context, index) {
-          if (index == _data.length) {
-            return _isFetchingMore
-                ? Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Center(child: CircularProgressIndicator()),
-            )
-                : SizedBox.shrink();
-          }
+              controller: _scrollController,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Number of items per row
+                crossAxisSpacing: 8.0, // Horizontal spacing between items
+                mainAxisSpacing: 8.0, // Vertical spacing between items
+                childAspectRatio: 1, // Aspect ratio of the cards
+              ),
+              itemCount: _data.length + 1, // Add one for the loading indicator
+              itemBuilder: (context, index) {
+                if (index == _data.length) {
+                  return _isFetchingMore
+                      ? Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Center(child: CircularProgressIndicator()),
+                        )
+                      : SizedBox.shrink();
+                }
 
-          final item = _data[index];
-          final imageUrl = getPokemonImageUrl(item['url']);
-          final pokemonNumber = getPokemonNumber(item['url']);
-          final pokemonName = item['name'];
+                final item = _data[index];
+                final imageUrl = getPokemonImageUrl(item['url']);
+                final pokemonNumber = getPokemonNumber(item['url']);
+                final pokemonName = item['name'];
 
-          return FutureBuilder<Color>(
-            future: getDominantColor(imageUrl),
-            builder: (context, snapshot) {
-              final cardColor = snapshot.data ?? Colors.white;
+                return FutureBuilder<Color>(
+                  future: getDominantColor(imageUrl),
+                  builder: (context, snapshot) {
+                    final cardColor = snapshot.data ?? Colors.white;
 
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          DetailPage(url: item['url'], dominantColor: cardColor),
-                    ),
-                  );
-                },
-                child: FutureBuilder<bool>(
-                  future: isPokemonFavorite(pokemonNumber),
-                  builder: (context, favoriteSnapshot) {
-                    final isFavorite = favoriteSnapshot.data ?? false;
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailPage(
+                                url: item['url'], dominantColor: cardColor),
+                          ),
+                        );
+                      },
+                      child: FutureBuilder<bool>(
+                        future: isPokemonFavorite(pokemonNumber),
+                        builder: (context, favoriteSnapshot) {
+                          final isFavorite = favoriteSnapshot.data ?? false;
 
-                    return Container(
-                      margin: EdgeInsets.all(8.0),
-                      child: Card(
-                        color: cardColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              icon: Icon(
-                                isFavorite
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: isFavorite ? Colors.red : Colors.white,
+                          return Container(
+                            margin: EdgeInsets.all(8.0),
+                            child: Card(
+                              color: cardColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
                               ),
-                              onPressed: () {
-                                toggleFavoritePokemon(
-                                    pokemonNumber, pokemonName, imageUrl);
-                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(
+                                      isFavorite
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      color: isFavorite
+                                          ? Colors.red
+                                          : Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      toggleFavoritePokemon(
+                                          pokemonNumber, pokemonName, imageUrl);
+                                    },
+                                  ),
+                                  SizedBox(height: 8),
+                                  Image.network(
+                                    imageUrl,
+                                    width: 70,
+                                    height: 69,
+                                    gaplessPlayback: true,
+                                    fit: BoxFit.fill,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Icon(Icons.error),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    pokemonName ?? 'No Name',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  Text(
+                                    'ID: $pokemonNumber',
+                                    style: TextStyle(color: Colors.white70),
+                                  ),
+                                ],
+                              ),
                             ),
-                            SizedBox(height: 8),
-                            Image.network(
-                              imageUrl,
-                              width: 70,
-                              height: 69,
-                              gaplessPlayback: true,
-                              fit: BoxFit.fill,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Icon(Icons.error),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              pokemonName ?? 'No Name',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            Text(
-                              'ID: $pokemonNumber',
-                              style: TextStyle(color: Colors.white70),
-                            ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
                     );
                   },
-                ),
-              );
-            },
-          );
-        },
-      ),
+                );
+              },
+            ),
     );
   }
 }
