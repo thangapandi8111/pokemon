@@ -8,7 +8,10 @@ import 'DetailPage.dart';
 import 'Favorites_Screen.dart';
 
 class PokiHome extends StatefulWidget {
+  const PokiHome({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _PokiHomeState createState() => _PokiHomeState();
 }
 
@@ -146,12 +149,12 @@ class _PokiHomeState extends State<PokiHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFE5FFF2),
+      backgroundColor: const  Color(0xFFE5FFF2),
       appBar: AppBar(
-        title: Text('Pokémon List'),
+        title: const Text('Pokémon List'),
         actions: [
           IconButton(
-            icon: Icon(Icons.favorite),
+            icon: const  Icon(Icons.favorite),
             onPressed: () {
               Navigator.push(
                 context,
@@ -160,7 +163,7 @@ class _PokiHomeState extends State<PokiHome> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh),
             onPressed: () {
               setState(() {
                 _offset = 0;
@@ -170,16 +173,16 @@ class _PokiHomeState extends State<PokiHome> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.logout_sharp),
+            icon: const  Icon(Icons.logout_sharp),
             onPressed: signUserOut,
           ),
         ],
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : GridView.builder(
               controller: _scrollController,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, // Number of items per row
                 crossAxisSpacing: 8.0, // Horizontal spacing between items
                 mainAxisSpacing: 8.0, // Vertical spacing between items
@@ -189,11 +192,11 @@ class _PokiHomeState extends State<PokiHome> {
               itemBuilder: (context, index) {
                 if (index == _data.length) {
                   return _isFetchingMore
-                      ? Padding(
-                          padding: const EdgeInsets.all(16.0),
+                      ? const Padding(
+                          padding:  EdgeInsets.all(16.0),
                           child: Center(child: CircularProgressIndicator()),
                         )
-                      : SizedBox.shrink();
+                      : const SizedBox.shrink();
                 }
 
                 final item = _data[index];
@@ -222,7 +225,7 @@ class _PokiHomeState extends State<PokiHome> {
                           final isFavorite = favoriteSnapshot.data ?? false;
 
                           return Container(
-                            margin: EdgeInsets.all(8.0),
+                            margin:const  EdgeInsets.all(8.0),
                             child: Card(
                               color: cardColor,
                               shape: RoundedRectangleBorder(
@@ -242,7 +245,7 @@ class _PokiHomeState extends State<PokiHome> {
                                         fit: BoxFit.fill,
                                         errorBuilder:
                                             (context, error, stackTrace) =>
-                                                Icon(Icons.error),
+                                                const Icon(Icons.error),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
@@ -264,12 +267,12 @@ class _PokiHomeState extends State<PokiHome> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 8),
+                                 const  SizedBox(height: 8),
 
-                                  SizedBox(height: 8),
+                                const  SizedBox(height: 8),
                                   Text(
                                     pokemonName ?? 'No Name',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
